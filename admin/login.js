@@ -28,7 +28,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
       throw error;
     }
 
-    // Si estamos en un contexto de negocio específico (ej. login_barberia005.html),
+    // Si estamos en un contexto de negocio específico (ej. login_barberia007.html),
     // se actualiza el metadata del usuario para asociarlo con ese negocio.
     if (data.user && negocioId) {
       const { error: updateError } = await supabase.auth.updateUser({

@@ -70,7 +70,7 @@
   .responsive-container { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
 </style>
 </head>
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200" data-negocio-id="barberia005">
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200" data-negocio-id="barberia007">
   <!-- Botón modo oscuro -->
   <button id="toggleDarkMode" class="fixed top-4 right-4 z-50 p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,11 +86,11 @@
     <aside class="w-64 bg-primary-700 dark:bg-primary-700 text-white p-6 hidden md:block">
       <h2 class="text-2xl font-bold mb-8">TurnoRD Admin</h2>
       <nav class="space-y-4">
-        <a href="panel_barberia005.html" class="block hover:text-white rounded px-3 py-2">Inicio</a>
-        <a href="turno_barberia005.html" class="block bg-white text-gray-900 font-semibold rounded px-3 py-2 shadow">Turnos</a>
-        <a href="negocio_barberia005.html" class="block hover:text-white rounded px-3 py-2">Mi negocio</a>
-        <a href="configuracion_barberia005.html" class="block hover:text-white rounded px-3 py-2 hidden">Configuración</a>
-        <a href="cierre_barberia005.html" id="cerrarSesion" class="block hover:text-red-400 mt-6 rounded px-3 py-2">Cerrar sesión</a>
+        <a href="panel_barberia007.html" class="block hover:text-white rounded px-3 py-2">Inicio</a>
+        <a href="turno_barberia007.html" class="block bg-white text-gray-900 font-semibold rounded px-3 py-2 shadow">Turnos</a>
+        <a href="negocio_barberia007.html" class="block hover:text-white rounded px-3 py-2">Mi negocio</a>
+        <a href="configuracion_barberia007.html" class="block hover:text-white rounded px-3 py-2 hidden">Configuración</a>
+        <a href="cierre_barberia007.html" id="cerrarSesion" class="block hover:text-red-400 mt-6 rounded px-3 py-2">Cerrar sesión</a>
       </nav>
     </aside>
 
@@ -98,66 +98,43 @@
     <main class="flex-1 p-4 sm:p-6 responsive-container w-full">
       <h1 class="text-2xl font-bold mb-6">Bienvenido, Administrador</h1>
 
-      <!-- Resumen -->
+      <!-- Resumen de Citas -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
-          <h3 class="text-lg font-semibold dark:text-gray-200">Turnos en espera</h3>
-          <p id="turnosEspera" class="text-3xl font-bold text-blue-700 dark:text-blue-400 mt-2">0</p>
+          <h3 class="text-lg font-semibold dark:text-gray-200">Citas Programadas (Hoy)</h3>
+          <p id="citasProgramadas" class="text-3xl font-bold text-blue-700 dark:text-blue-400 mt-2">0</p>
         </div>
         <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
-          <h3 class="text-lg font-semibold dark:text-gray-200">Turnos atendidos</h3>
-          <p id="turnosAtendidos" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">0</p>
+          <h3 class="text-lg font-semibold dark:text-gray-200">Citas Completadas (Hoy)</h3>
+          <p id="citasCompletadas" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">0</p>
         </div>
         <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow">
-          <h3 class="text-lg font-semibold dark:text-gray-200">Turnos del día</h3>
-          <p id="turnosDia" class="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">0</p>
+          <h3 class="text-lg font-semibold dark:text-gray-200">Total de Citas (Hoy)</h3>
+          <p id="citasHoy" class="text-3xl font-bold text-purple-600 dark:text-purple-400 mt-2">0</p>
         </div>
       </div>
 
-      <!-- Turno en Atención -->
-      <div id="turno-en-atencion-card" class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border-l-4 border-green-500 hidden mb-8">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">Turno en Atención</h2>
-          <div id="atencion-timer" class="text-2xl font-bold text-red-500 bg-red-100 dark:bg-red-900/50 px-3 py-1 rounded-lg">--:--</div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Turno</p>
-            <p id="atencion-turno" class="text-2xl font-bold text-green-600 dark:text-green-400">--</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Cliente</p>
-            <p id="atencion-cliente" class="text-lg font-semibold">--</p>
-          </div>
-          <div>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Servicio</p>
-            <p id="atencion-servicio" class="text-lg font-semibold">--</p>
-          </div>
-        </div>
-      </div>
-      <!-- Fin Turno en Atención -->
-
-      <!-- Botón limpiar historial -->
-      <div class="flex justify-end mb-4">
-        <button id="btnLimpiarHistorial" onclick="limpiarHistorialTurnos()" class="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white px-4 py-2 rounded">
-          Limpiar historial
-        </button>
+      <!-- Selector de Fecha -->
+      <div class="mb-6">
+        <label for="fecha-selector" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Seleccionar Fecha:</label>
+        <input type="date" id="fecha-selector" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg p-2">
       </div>
 
-      <!-- Tabla de turnos -->
+      <!-- Tabla de Citas -->
       <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 overflow-x-auto">
-        <h2 class="text-lg font-bold mb-4 dark:text-gray-200">Historial de turnos</h2>
+        <h2 class="text-lg font-bold mb-4 dark:text-gray-200">Citas del Día</h2>
         <table class="min-w-full text-left">
           <thead>
             <tr>
-              <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Turno</th>
-              <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Cliente</th>
               <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Hora</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Cliente</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Servicio</th>
               <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Estado</th>
+              <th class="py-2 px-4 border-b dark:border-gray-700 dark:text-gray-300">Acciones</th>
             </tr>
           </thead>
-          <tbody id="tablaHistorial" class="dark:text-gray-300">
-            <!-- Las filas dinámicas se insertan desde panel.js -->
+          <tbody id="tablaCitas" class="dark:text-gray-300">
+            <!-- Las filas de citas se insertarán aquí desde panel.js -->
           </tbody>
         </table>
       </div>
