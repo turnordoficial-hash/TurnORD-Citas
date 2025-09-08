@@ -54,10 +54,21 @@ async function fetchBusinessConfig() {
             .from('configuracion_negocio')
             .select('hora_apertura, hora_cierre, dias_operacion')
             .eq('negocio_id', negocioId)
-            .single();
+            .maybeSingle();
 
         if (error) throw error;
-        configCache = data || {};
+
+        if (data) {
+            configCache = data;
+        } else {
+            // Provide default values if no configuration is found
+            console.warn(`No configuration found for negocio_id '${negocioId}'. Using default values.`);
+            configCache = {
+                hora_apertura: '09:00',
+                hora_cierre: '18:00',
+                dias_operacion: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+            };
+        }
 
         // Set min/max for date picker
         datePicker.min = formatDate(new Date());
