@@ -145,12 +145,6 @@
 
  <script type="module" src="admin/turno.js"></script>
 <script>
-document.getElementById('telefono').addEventListener('input', function() {
-  this.value = this.value.replace(/[^0-9]/g, '');
-});
-document.getElementById('nombre').addEventListener('input', function() {
-  this.value = this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, '');
-});
 // Esto busca todos los enlaces del sidebar y resalta el que coincide con la URL
 document.querySelectorAll('aside nav a').forEach(link => {
   if (window.location.pathname.endsWith(link.getAttribute('href'))) {
