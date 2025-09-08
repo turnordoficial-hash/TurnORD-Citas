@@ -72,7 +72,7 @@
     .responsive-container { max-width: 1280px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
   </style>
 </head>
-<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200" data-negocio-id="barberia005">
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200" data-negocio-id="barberia007">
   <div class="flex min-h-screen relative">
     <!-- Mobile menu button -->
     <button id="mobile-menu-button" class="md:hidden fixed top-4 left-4 z-50 bg-primary-600 text-white p-2 rounded-md shadow-lg">
@@ -97,11 +97,11 @@
         </button>
       </div>
       <nav class="space-y-4">
-        <a href="panel_barberia005.html" class="block hover:text-white rounded px-3 py-2">Inicio</a>
-        <a href="turno_barberia005.html" class="block bg-white text-gray-900 font-semibold rounded px-3 py-2 shadow">Turnos</a>
-        <a href="negocio_barberia005.html" class="block hover:text-white rounded px-3 py-2">Mi negocio</a>
-        <a href="configuracion_barberia005.html" class="block hover:text-white rounded px-3 py-2 hidden">Configuración</a>
-        <a href="cierre_barberia005.html" id="cerrarSesion" class="block hover:text-red-400 mt-6 rounded px-3 py-2">Cerrar sesión</a>
+        <a href="panel_barberia007.html" class="block hover:text-white rounded px-3 py-2">Inicio</a>
+        <a href="turno_barberia007.html" class="block bg-white text-gray-900 font-semibold rounded px-3 py-2 shadow">Turnos</a>
+        <a href="negocio_barberia007.html" class="block hover:text-white rounded px-3 py-2">Mi negocio</a>
+        <a href="configuracion_barberia007.html" class="block hover:text-white rounded px-3 py-2 hidden">Configuración</a>
+        <a href="cierre_barberia007.html" id="cerrarSesion" class="block hover:text-red-400 mt-6 rounded px-3 py-2">Cerrar sesión</a>
       </nav>
     </aside>
 
@@ -448,7 +448,7 @@ document.querySelectorAll('aside nav a').forEach(link => {
 </script>
 <script type="module">
   import { supabase } from './database.js';
-  const negocioId = 'barberia005';
+  const negocioId = 'barberia007';
   try {
     const { data } = await supabase
       .from('configuracion_negocio')
