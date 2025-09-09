@@ -73,9 +73,19 @@
     </select>
   </div>
 
-  <!-- Paso 2: Selección de Fecha -->
+  <!-- Paso 2: Selección de Barbero -->
+  <div id="barber-selection" class="hidden">
+      <label class="block text-left text-sm font-medium mb-2 dark:text-gray-300">2. Elige un barbero</label>
+      <select id="barbero" name="barbero" required
+          class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+          <option value="">Selecciona un barbero</option>
+          <!-- Los barberos se cargarán dinámicamente -->
+      </select>
+  </div>
+
+  <!-- Paso 3: Selección de Fecha -->
   <div id="date-selection" class="hidden">
-    <label class="block text-left text-sm font-medium mb-2 dark:text-gray-300">2. Elige una fecha</label>
+    <label class="block text-left text-sm font-medium mb-2 dark:text-gray-300">3. Elige una fecha</label>
     <input type="date" id="date-picker" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
   </div>
 
