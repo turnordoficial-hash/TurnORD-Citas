@@ -24,6 +24,8 @@ function formatDate(date) {
 const negocioId = getNegocioId();
 const bookingInterface = document.getElementById('booking-interface');
 const serviceSelect = document.getElementById('servicio');
+const barberSelectionDiv = document.getElementById('barber-selection');
+const barberSelect = document.getElementById('barbero');
 const dateSelectionDiv = document.getElementById('date-selection');
 const datePicker = document.getElementById('date-picker');
 const timeSlotSelectionDiv = document.getElementById('time-slot-selection');
@@ -37,8 +39,10 @@ const confirmationMessageContainer = document.getElementById('confirmation-messa
 
 // --- State ---
 let servicesCache = {};
+let barbersCache = {};
 let configCache = {};
 let selectedService = null;
+let selectedBarber = null;
 let selectedDate = null;
 let selectedTimeSlot = null;
 
@@ -107,6 +111,34 @@ async function fetchActiveServices() {
     }
 }
 
+/**
+ * Carga los barberos activos y los popula en el dropdown.
+ */
+async function fetchActiveBarbers() {
+    if (!negocioId) return;
+    try {
+        const { data, error } = await supabase
+            .from('barberos')
+            .select('id, nombre')
+            .eq('negocio_id', negocioId)
+            .eq('activo', true)
+            .order('nombre', { ascending: true });
+
+        if (error) throw error;
+
+        barbersCache = {};
+        data.forEach(b => { barbersCache[b.id] = b.nombre; });
+
+        barberSelect.innerHTML = '<option value="">Selecciona un barbero</option>' +
+            data.map(b => `<option value="${b.id}">${b.nombre}</option>`).join('');
+
+    } catch (e) {
+        console.error('Error fetching barbers:', e);
+        barberSelect.disabled = true;
+        barberSelect.innerHTML = '<option value="">No se pudieron cargar los barberos</option>';
+    }
+}
+
 
 // --- Core Booking Logic ---
 
@@ -114,7 +146,7 @@ async function fetchActiveServices() {
  * Genera los horarios disponibles para una fecha y servicio dados.
  */
 async function generateAvailableTimeSlots() {
-    if (!selectedDate || !selectedService || !configCache.hora_apertura) {
+    if (!selectedDate || !selectedService || !selectedBarber || !configCache.hora_apertura) {
         return;
     }
 
@@ -124,12 +156,13 @@ async function generateAvailableTimeSlots() {
     const serviceDuration = servicesCache[selectedService];
     const { hora_apertura, hora_cierre } = configCache;
 
-    // Fetch existing appointments for the selected date
+    // Fetch existing appointments for the selected date and barber
     const { data: bookedAppointments, error } = await supabase
         .from('citas')
         .select('hora_inicio')
         .eq('negocio_id', negocioId)
-        .eq('fecha', selectedDate);
+        .eq('fecha', selectedDate)
+        .eq('barber_id', selectedBarber);
 
     if (error) {
         console.error('Error fetching booked appointments:', error);
@@ -224,7 +257,7 @@ async function handleBooking() {
         alert('Por favor, ingresa tu nombre.');
         return;
     }
-    if (!selectedService || !selectedDate || !selectedTimeSlot) {
+    if (!selectedService || !selectedBarber || !selectedDate || !selectedTimeSlot) {
         alert('Por favor, completa todos los pasos de la reserva.');
         return;
     }
@@ -240,7 +273,8 @@ async function handleBooking() {
             servicio: selectedService,
             fecha: selectedDate,
             hora_inicio: selectedTimeSlot,
-            estado: 'programada'
+            estado: 'programada',
+            barber_id: selectedBarber
         }]);
 
         if (error) {
@@ -287,15 +321,18 @@ async function handleBooking() {
  * Actualiza la visibilidad de las secciones del formulario.
  */
 function updateUIState() {
-    dateSelectionDiv.classList.toggle('hidden', !selectedService);
+    barberSelectionDiv.classList.toggle('hidden', !selectedService);
+    dateSelectionDiv.classList.toggle('hidden', !selectedBarber);
     timeSlotSelectionDiv.classList.toggle('hidden', !selectedDate);
     customerDetailsDiv.classList.toggle('hidden', !selectedTimeSlot);
-    reserveButton.disabled = !selectedService || !selectedDate || !selectedTimeSlot || !nombreInput.value;
+    reserveButton.disabled = !selectedService || !selectedBarber || !selectedDate || !selectedTimeSlot || !nombreInput.value;
 }
 
 function handleServiceSelection(event) {
     selectedService = event.target.value;
     // Reset subsequent selections
+    selectedBarber = null;
+    barberSelect.value = '';
     selectedDate = null;
     datePicker.value = '';
     selectedTimeSlot = null;
@@ -313,6 +350,17 @@ async function handleDateSelection(event) {
     if (selectedDate) {
         await generateAvailableTimeSlots();
     }
+    updateUIState();
+}
+
+function handleBarberSelection(event) {
+    selectedBarber = event.target.value;
+    // Reset subsequent selections
+    selectedDate = null;
+    datePicker.value = '';
+    selectedTimeSlot = null;
+    timeSlotsContainer.innerHTML = '';
+    timeSlotMessage.textContent = '';
     updateUIState();
 }
 
@@ -336,9 +384,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Fetch data
     await fetchBusinessConfig();
     await fetchActiveServices();
+    await fetchActiveBarbers();
 
     // Setup event listeners
     serviceSelect.addEventListener('change', handleServiceSelection);
+    barberSelect.addEventListener('change', handleBarberSelection);
     datePicker.addEventListener('change', handleDateSelection);
     nombreInput.addEventListener('input', updateUIState);
     reserveButton.addEventListener('click', handleBooking);
